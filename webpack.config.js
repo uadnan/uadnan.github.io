@@ -3,6 +3,10 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+
+const FixStyleOnlyEntriesPlugin = require("./webpack-fix-style-only-entries");
+
 
 module.exports = (env, argv) => {
     const DEBUG = argv.mode !== 'production';
@@ -29,6 +33,10 @@ module.exports = (env, argv) => {
             path: path.resolve(__dirname, 'build')
         },
         plugins: [
+            new FixStyleOnlyEntriesPlugin(),
+            new CopyWebpackPlugin([
+                {from: "./src/images", to: "images"}
+            ]),
             new MiniCssExtractPlugin({
                 // Options similar to the same options in webpackOptions.output
                 // both options are optional
